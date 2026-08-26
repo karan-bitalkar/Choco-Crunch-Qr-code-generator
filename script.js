@@ -137,51 +137,21 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   /* ==========================================
-     6. Product Gallery View Switcher
-     ========================================== */
-  const galleryMainImg = document.getElementById('product-hero-image');
-  const galleryTabs = document.querySelectorAll('.gallery-tab');
-  const mainImageWrapper = document.getElementById('main-image-wrapper');
-
-  let currentViewTitle = "PROTINUT Classy Crunch – Front View";
-
-  if (galleryMainImg && galleryTabs.length > 0) {
-    galleryTabs.forEach(tab => {
-      tab.addEventListener('click', () => {
-        // Remove active from all tabs
-        galleryTabs.forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-
-        const newImgSrc = tab.getAttribute('data-view-img');
-        const viewTitle = tab.getAttribute('data-view-title');
-
-        if (newImgSrc && galleryMainImg) {
-          galleryMainImg.style.opacity = '0';
-          setTimeout(() => {
-            galleryMainImg.src = newImgSrc;
-            galleryMainImg.alt = viewTitle || 'PROTINUT Product View';
-            currentViewTitle = viewTitle || 'PROTINUT Product View';
-            galleryMainImg.style.opacity = '1';
-          }, 150);
-        }
-      });
-    });
-  }
-
-  /* ==========================================
-     7. Lightbox Image Modal
+     6. Product Image Lightbox Modal
      ========================================== */
   const lightboxModal = document.getElementById('lightbox-modal');
   const lightboxImg = document.getElementById('lightbox-img');
   const lightboxTitle = document.getElementById('lightbox-title');
   const lightboxClose = document.getElementById('lightbox-close');
   const lightboxOverlay = document.getElementById('lightbox-overlay');
+  const mainImageWrapper = document.getElementById('main-image-wrapper');
+  const galleryMainImg = document.getElementById('product-hero-image');
 
   function openLightbox(imgSrc, title) {
     if (!lightboxModal || !lightboxImg) return;
-    lightboxImg.src = imgSrc;
-    lightboxImg.alt = title || 'Product Detail View';
-    if (lightboxTitle) lightboxTitle.textContent = title || 'PROTINUT Peanut Butter – Classy Crunch';
+    lightboxImg.src = imgSrc || 'images/classy-crunch.jpg';
+    lightboxImg.alt = title || 'PROTINUT Peanut Butter – CLASSY CRUNCH – Net Qty. 550g';
+    if (lightboxTitle) lightboxTitle.textContent = title || 'PROTINUT Peanut Butter – CLASSY CRUNCH – Net Qty. 550g';
     
     lightboxModal.classList.add('open');
     lightboxModal.setAttribute('aria-hidden', 'false');
@@ -198,16 +168,17 @@ document.addEventListener('DOMContentLoaded', () => {
   // Hero main image click to zoom
   if (mainImageWrapper) {
     mainImageWrapper.addEventListener('click', () => {
-      const currentSrc = galleryMainImg ? galleryMainImg.src : 'images/product-front.jpg';
-      openLightbox(currentSrc, currentViewTitle);
+      const zoomSrc = mainImageWrapper.getAttribute('data-zoom-src') || (galleryMainImg ? galleryMainImg.src : 'images/classy-crunch.jpg');
+      const zoomTitle = mainImageWrapper.getAttribute('data-zoom-title') || 'PROTINUT Peanut Butter – CLASSY CRUNCH – Net Qty. 550g';
+      openLightbox(zoomSrc, zoomTitle);
     });
   }
 
   // Clickable zoom elements in sections
   document.querySelectorAll('.clickable-zoom').forEach(elem => {
     elem.addEventListener('click', () => {
-      const src = elem.getAttribute('data-zoom-src') || elem.querySelector('img')?.src;
-      const title = elem.getAttribute('data-zoom-title') || 'PROTINUT Packaging Detail View';
+      const src = elem.getAttribute('data-zoom-src') || elem.querySelector('img')?.src || 'images/classy-crunch.jpg';
+      const title = elem.getAttribute('data-zoom-title') || 'PROTINUT Peanut Butter – CLASSY CRUNCH – Net Qty. 550g';
       if (src) openLightbox(src, title);
     });
   });
